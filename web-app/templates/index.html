@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Microservice</title>
+</head>
+<body>
+    <h1>Data from Database</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Feature 1</th>
+            <th>Feature 2</th>
+            <th>Label</th>
+        </tr>
+        {% for row in data %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p>Data processed by the data service: {{ processed_data }}</p>
+</body>
+</html>

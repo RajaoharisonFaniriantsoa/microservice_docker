@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./web-app
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://db_user:db_password@db:5432/micro_db
+    depends_on:
+      - db
+      - data-processor
+    networks:
+      - micro-net
+    volumes:
+      - ./web-app:/app
+
+  db:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=db_user
+      - POSTGRES_PASSWORD=db_password
+      - POSTGRES_DB=micro_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
+    networks:
+      - micro-net
+    ports:
+      - "5432:5432"
+
+  data-processor:
+    build: ./data-service
+    environment:
+      - DATABASE_URL=postgresql://db_user:db_password@db:5432/micro_db
+    networks:
+      - micro-net
+    volumes:
+      - ./data-service:/app
+
+volumes:
+  postgres-data:
+
+networks:
+  micro-net:
+    driver: bridge
